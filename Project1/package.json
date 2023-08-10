@@ -1,0 +1,21 @@
+{
+  "name": "project1",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Francis1408/Rocketseat-Node_Projects.git"
+  },
+  "author": "Francisco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Francis1408/Rocketseat-Node_Projects/issues"
+  },
+  "homepage": "https://github.com/Francis1408/Rocketseat-Node_Projects#readme"
+}
