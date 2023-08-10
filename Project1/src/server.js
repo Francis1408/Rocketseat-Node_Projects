@@ -1,7 +1,9 @@
 import http from 'http'
 import { json } from './middlewares/json.js'
+import { randomUUID } from 'node:crypto'
+import { Database } from './database.js'
 
-const users = []
+const database = new Database()
 
 const server = http.createServer(async (req, res) =>{
     const {method, url} = req
@@ -11,19 +13,22 @@ const server = http.createServer(async (req, res) =>{
 
 //-------- Resposta é users ja cadastrados em formato de string -----
     if (method === 'GET' && url === '/users') {
-        return res
-            .end(JSON.stringify(users))
+        const users = database.select('users') // Procura o array de users no database
+
+        return res.end(JSON.stringify(users))
     }
 
 //------ Adiciona na lista de usuarios o corpo da req -----
     if (method === 'POST' && url === '/users') {
         const {name, email} = req.body
 
-        users.push({
-            id: 1,
+        const user = {
+            id: randomUUID(),
             name,
             email
-        })
+        }
+
+        database.insert('users', user) // insere user no array de users
 
         return res.writeHead(201).end() // Resposta de sucesso
     }
