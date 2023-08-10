@@ -7,6 +7,7 @@ const server = http.createServer(async (req, res) =>{
 
     const buffers = []
 
+// ------ Consome todos os chunks e envia tudo em uma unica resposta -----
     for await (const chunk of req) {
         buffers.push(chunk)
     }
@@ -17,6 +18,7 @@ const server = http.createServer(async (req, res) =>{
         req.body = null
     }
 
+
     if (method === 'GET' && url === '/users') {
         return res
             .setHeader('Content-type', 'application/json')
@@ -25,6 +27,17 @@ const server = http.createServer(async (req, res) =>{
 
     if (method === 'POST' && url === '/users') {
         const {name, email} = req.body
+
+        users.push({
+            id: 1,
+            name,
+            email
+        })
+
+        return res.writeHead(201).end() // Resposta de sucesso
     }
-        
+
+    return res.writeHead(404).end()
 })
+
+server.listen(3333)
