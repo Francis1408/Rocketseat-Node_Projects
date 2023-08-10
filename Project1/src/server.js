@@ -1,36 +1,27 @@
 import http from 'http'
 import { json } from './middlewares/json.js'
-import { randomUUID } from 'node:crypto'
-import { Database } from './database.js'
+import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
-const database = new Database()
 
 const server = http.createServer(async (req, res) =>{
     const {method, url} = req
 
     await json(req, res)
 
+    const route = routes.find(route => {
+        return route.method === method && route.path.test(url) // Testa para ver se a URL eh válida
+    })
 
-//-------- Resposta é users ja cadastrados em formato de string -----
-    if (method === 'GET' && url === '/users') {
-        const users = database.select('users') // Procura o array de users no database
+    if (route) {
+        const routeParams = req.url.match(route.path)
 
-        return res.end(JSON.stringify(users))
-    }
+        const { query, ...params } = routeParams.groups
 
-//------ Adiciona na lista de usuarios o corpo da req -----
-    if (method === 'POST' && url === '/users') {
-        const {name, email} = req.body
+        req.params = params
+        req.query = query ? extractQueryParams(query) : {}
 
-        const user = {
-            id: randomUUID(),
-            name,
-            email
-        }
-
-        database.insert('users', user) // insere user no array de users
-
-        return res.writeHead(201).end() // Resposta de sucesso
+        return route.handler(req, res)
     }
 
     return res.writeHead(404).end()
