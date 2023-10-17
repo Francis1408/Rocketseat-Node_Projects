@@ -8,7 +8,7 @@ export const routes = [
 
 // ROTA GET - Procurar
     {
-        method: 'GET',
+        method: 'imp',
         path: buildRoutePath('/users'),
         handler: (req, res) => {
             console.log(req.query)

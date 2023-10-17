@@ -1,0 +1,19 @@
+--> Dependências
+
+npm -i -D typescript
+npx tsc --init
+npm install -D @types/node
+npm install tsx -D
+
+-> Mudar versão para es2020
+
+
+--> Para executar => Tranferir para JS
+npx tsc <target file path> // INUTIL
+
+--> Para executar
+npx tsx <target file path>
+
+--> Instalação do knex com sqlite3
+npm install knex sqlite3
+
